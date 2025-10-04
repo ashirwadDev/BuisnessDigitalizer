@@ -35,7 +35,7 @@ export const updateBusiness = async (req, res) => {
         const oldPath = path.join("uploads", b.logo);
         if(fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
       }
-      b.logo = req.file.filename;
+      b.logo = req.file.path; // Cloudinary gives a public URL
     }
 
     await b.save();

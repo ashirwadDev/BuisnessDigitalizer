@@ -1,21 +1,13 @@
 import express from "express";
+import { createBusiness, getAllBusinesses, getBusinessBySlug, deleteBusiness } from "../controllers/businessController.js";
 import { protect } from "../middleware/auth.js";
-import { upload } from "../middleware/upload.js";
-import { createBusiness, updateBusiness, deleteBusiness, getBusinessBySlug } from "../controllers/businessController.js";
+import upload from "../middleware/upload.js";
 
 const router = express.Router();
 
-// Multer safe wrapper
-const uploadSafe = (req, res, next) => {
-  upload.single("logo")(req, res, (err) => {
-    if(err) return res.status(400).json({ msg: err.message });
-    next();
-  });
-};
-
-router.post("/", protect, uploadSafe, createBusiness);
-router.put("/:slug", protect, uploadSafe, updateBusiness);
-router.delete("/:slug", protect, deleteBusiness);
+router.post("/", protect, upload.single("logo"), createBusiness);
+router.get("/", getAllBusinesses);
 router.get("/:slug", getBusinessBySlug);
+router.delete("/:slug", protect, deleteBusiness);
 
 export default router;
